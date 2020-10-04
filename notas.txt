@@ -1,0 +1,14 @@
+Para node js
+
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "postinstall": "webpack --mode production"
+
+
+Para react js
+
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+

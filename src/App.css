@@ -1,38 +1,334 @@
-.App {
+body,
+input,
+button {
+    font-size: 1.6vw;
+    margin: 0;
+    font-family: Sans-Serif;
+}
+@media(max-width: 1024px) {
+    body,
+    input,
+    button {
+        font-size: 1em;
+    }
+}
+input:focus,
+button:focus {
+    outline:0;
+}
+input[type=text] {
+    border: none;
+    border: solid 2px #4c4c4f;
+    font-size: 1em;
+    background-color: transparent;
+    color:rgb(150, 149, 149);
+    padding: .4em 1em;
+    margin: 2ex 0;
+    width: 100%;
+}
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.call-exit-button,
+.hangup-button,
+.audio-button-true,
+.audio-button-false,
+.video-button-true,
+.video-button-false,
+.fullscreen-button {
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 27%;
+    background: rgba(44, 44, 44, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    box-shadow: 0.2ex 0.2ex 1.5em #444;
+    transition: all .2s ease-out;
+    margin: 0 .4em;
+    cursor: pointer;
+}
+.call-exit-button:hover,
+.hangup-button:hover,
+.audio-button-true:hover,
+.audio-button-false:hover,
+.video-button-true:hover,
+.video-button-false:hover,
+.fullscreen-button:hover {
+    transform: scale(1.3);
+    box-shadow: .4ex .4ex 3em #666;
+    background: rgb(110, 157, 252)
+}
+.you-left,
+.remote-left,
+.hangup-button,
+.audio-button-true .on,
+.video-button-true .on,
+.video-button-false .off,
+.fullscreen-button .on,
+.room-occupied {
+	display: none;
+}
+:-webkit-full-screen .fullscreen-button .on {
+    display: block;
+}
+:-moz-full-screen .fullscreen-button .on {
+    display: block;
+}
+:-ms-fullscreen .fullscreen-button .on {
+    display: block;
+}
+:fullscreen .fullscreen-button .on { /* spec */
+    display: block;
+}
+:-webkit-full-screen .fullscreen-button .off {
+    display: none;
+}
+:-moz-full-screen .fullscreen-button .off {
+    display: none;
+}
+:-ms-fullscreen .fullscreen-button .off {
+    display: none;
+}
+:fullscreen .fullscreen-button .off { /* spec */
+    display: none;
+}
+/* deeper elements */
+:-webkit-full-screen video {
+  width: 100%;
+  height: 100%;
+}
+.guest-hangup + .auth .you-left {
+    display: inline;
+}
+.full .room-occupied,
+.host-hangup + .auth .remote-left,
+.recent-room {
+	display: block;
+}
+.recent-room {
+    color: #4285F4;
+    margin: 1ex 1em;
+}
+.remote-video {
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+.local-video {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: all .3s;
+}
+.established .local-video {
+	margin: 10px;
+    max-height: 17%;
+    max-width: 17%;
+    height: auto;
+    width: auto;
+}
+.media-bridge,
+.local-video,
+.remote-video {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+.auth {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+.primary-button {
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    background-color: #4285F4;
+    border: none;
+    color: white;
+    font-size: 0.8em;
+    margin: 0 5px 20px 5px;
+    width: 8em;
+    line-height: 3ex;
+    padding: 1ex 0.7em;
+    text-align: center;
+    -webkit-box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
+    -moz-box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
+    box-shadow: 1px 1px 5px 0 rgba(0,0,0,.5);
+}
+.media-controls {
+    display: flex;
+    margin: 4ex 0;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    border-radius: 6px;
+    padding-left: 3pc;
+    padding-right: 3pc;
+    width: auto;
+}
+.svg {
+    width: 1em;
+}
+.room-occupied,
+.request-access,
+.waiting,
+.request-access,
+.grant-access,
+.waiting {
+    color: white;
+    overflow: hidden;
+    padding: 0 1em;
+    box-sizing: border-box;
+    width: 100%;
+    background: rgba(0, 0, 0, .8);
+    max-height: 0;
+    transition: max-height .3s ease;
+}
+
+.waiting {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    color: white;
+    transition: max-height .3s ease;
+}
+
+.waiting p{
+    color: white;
+}
+
+.full + .auth .room-occupied,
+.guest-hangup + .auth .request-access,
+.join + .auth .request-access,
+.approve + .auth .grant-access {
+    transition-delay: .3s;
+    /* Set the max-height to something large. In this case there's an obvious limit. */
+    max-height: 20ex;
+}
+.host-hangup + .auth .waiting,
+.create + .auth .waiting {
+    /* Set the max-height to something large. In this case there's an obvious limit. */
+    max-height: 20ex;
+}
+.established + .auth .hangup-button {
+    display: flex;
+}
+
+/*Login y registro*/
+.user_card {
+  height: 441px;
+  width: 350px;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #d0d0d000;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  margin-top: 42%
+}
+.brand_logo_container {
+  position: absolute;
+  height: 170px;
+  width: 170px;
+  top: -75px;
+  border-radius: 50%;
+  background: transparent;
+  padding: 10px;
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.brand_logo {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  border: 2px solid white;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.form_container {
+  margin-top: 42px;
 }
+.title{
+  color:#1d83d4;
+}
+.login_btn {
+  width: 100%;
+  background: #c0392b !important;
+  color: white !important;
+}
+.login_btn:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+.login_container {
+  padding: 0 2rem;
+}
+.input-group-text {
+  background: #c0392b !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #c0392b !important;
+}
+/*Fin login yregistro*/
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/*Navbar*/
+.navbar {
+  border-bottom: solid 1px #EBEBEB;
+}
+.bottom-tab-nav {
+  /*border-top: solid 1px #EBEBEB;*/
+}
+.nav-link,
+.bottom-nav-link {
+  color: #55575b;
+}
+.bottom-nav-link.active {
+  color: #922c88;
+}
+.bottom-tab-label {
+  font-size: 12px;
+}
+/*Fin De Navbar*/
+
+/*Boton de Agregar ruta */
+
+.buttonPlus{
+  top: 3px;
+  width: 45px;
+  height: 30px;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-radius: 10px;
+  align-items: center;
+  background: #fff;
+  border-left-width: 3px;
+  border-left-color: #20d5ea;
+  border-right-width: 3px;
+  border-right-color: #20d5ea;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/*Fin de Agregar ruta*/

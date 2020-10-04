@@ -9,21 +9,21 @@ const compression = require('compression');
 
 const app = express(),
   options = { 
-    //Esto es opcional
+    //OBLIGATORIO, SINO NO FUNCIONA
     key: fs.readFileSync(__dirname + '/rtc-video-room-key.pem'),
     cert: fs.readFileSync(__dirname + '/rtc-video-room-cert.pem')
   },
   port = process.env.PORT || 3000,
   server = process.env.NODE_ENV === 'production' ?
     http.createServer(app).listen(port) :
-    https.createServer(options, app).listen(port),
+    https.createServer(options, app).listen(port), //RTC NO FUNCIONA SIN LOS CERTIFICADOS, AUNQUE ESTOS NO SEAN VALIDOS
   io = sio(server);
 
 // Basicamente  usamos el build de react, para inyectarlo a node js
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use((req, res) => res.sendFile(__dirname + '/dist/index.html'));
-app.use(favicon('./dist/favicon.ico'));
+app.use(express.static(path.join(__dirname, 'build')));
+app.use((req, res) => res.sendFile(__dirname + '/build/index.html'));
+app.use(favicon('./build/favicon.ico'));
 
 // Switch off the default 'X-Powered-By: Express' header
 app.disable('x-powered-by');
@@ -31,10 +31,16 @@ app.disable('x-powered-by');
 //Hacemos conexión io.sockets
 io.sockets.on('connection', socket => {
   
+  console.log("Se ha creado la conexión");
+
   let room = '';
   
-  // Envío a todas las clientas en la sala (canal) excepto remitente
-  socket.on('message', message => socket.broadcast.to(room).emit('message', message));
+  // Envío a todas las clientes en la sala (canal) excepto remitente
+  socket.on('message', message => {
+    socket.broadcast.to(room).emit('message', message);
+    console.log(message);
+  });
+
   socket.on('find', () => {
     const url = socket.request.headers.referer.split('/');
     room = url[url.length - 1];
